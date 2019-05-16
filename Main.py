@@ -190,7 +190,7 @@ if "MonoSet1-1" in settingsCheck.read():
                     "properties": [],
                     "railroads": [],
                     "inJail":   False,
-                    "PlayerLocation": "go"
+                    "PlayerLocation": property[0]
                     }
                 )
             break
@@ -216,13 +216,13 @@ else:
 
 
 def chancePickUp():
-    cardPick = random.randint(0, 16)
+    cardPick = random.randint(0, len(chanceCards))
     return chanceCards[cardPick]
 
 # Picks a random card from the community chest lists
 
 def communityPickUp():
-    cardPick = random.randint(0, 16)
+    cardPick = random.randint(0, len(CommunityChest))
     return CommunityChest[cardPick]
 
 
@@ -233,12 +233,6 @@ def dice_roll():
 
     total = die1 + die2
     return die1, die2, total
-
-
-# Ai play style Programming based of easy, normal and hard
-def ai_easy():
-    print("Ai player is going now........")
-
 
 
 # Main code, a for loop for all the real players
@@ -282,7 +276,6 @@ for x in range(0, int(settings[1])):
             if property[total] != "Chance":
 
                 # Checks if any one owns the property
-
                 propertycheck = is_property_owned(property[total])
 
                 # if the property check results in a player name it will state that name
