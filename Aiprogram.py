@@ -26,7 +26,7 @@ def Ai_easy():
         die1, die2, total = dice_roll()
         aiPlayerList[x]["PlayerLocation"]+= total
         print(aiPlayerList[x]["PlayerLocation"])
-
+# hello
         
 
 
