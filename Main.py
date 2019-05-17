@@ -10,17 +10,12 @@
 
 # todo
 # add try and except to everything
-#  Figure out how to use the settings variable in the code
-# Make sure to add a check to weather it is the main players role or if the AI rolled
-# add snake eye implementation '
-# finish all the setup questions
+# add snake eye implementation for players (Ai finished)'
 # Turn the chance cards into commands
-# figure out how to ask for player names
-# Make a function that will add what ever the player and Ai buys to a list
-# Make the AI work based off an easy, normal and hard setting.
+# Make the AI work based off a normal and hard setting.
 # Finish if statment for if the player lands on a chance
-# add a money part to the players list
-# add a list for the price of the properties
+# Create a hotel and apartments function 
+# create a rent function
 # see if you want to add a save game in memory function, use the shelve option
 import time
 import random
@@ -222,15 +217,18 @@ def communityPickUp():
 
 
 def dice_roll():
+    snakeEyes = False
     die1 = random.randint(1, 6)
     die2 = random.randint(1, 6)
+    if die1 == die2:
+        snakeEyes = True
     total = die1 + die2
-    return die1, die2, total
+    return die1, die2, total, snakeEyes
 
 
 # Main code, a for loop for all the real players
 for x in range(0, int(settings[1])):
-    die1, die2, total = dice_roll()
+    die1, die2, total, snakeEyes = dice_roll()
 
     # Calls either chance or community function to pick a random card and give it to the player
     ChanceCardPick = chancePickUp()
