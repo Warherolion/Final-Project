@@ -10,13 +10,14 @@
 
 # todo
 # add try and except to everything
-# add snake eye implementation for players (Ai finished)'
+# Add snake eye implementation for players (Ai finished)'
 # Turn the chance cards into commands
 # Make the AI work based off a normal and hard setting.
 # Finish if statment for if the player lands on a chance
 # Create a hotel and apartments function 
 # create a rent function
 # see if you want to add a save game in memory function, use the shelve option
+# create make each player init with a input asking the user what do they want to do.
 import time
 import random
 
@@ -225,7 +226,8 @@ def dice_roll():
 
 
 # Main code, a for loop for all the real players
-for x in range(0, int(settings[1])):
+x = 0
+while True: 
     die1, die2, total, snakeEyes = dice_roll()
 
     # Calls either chance or community function to pick a random card and give it to the player
@@ -287,6 +289,8 @@ for x in range(0, int(settings[1])):
                                     players[0 + x]["properties"] = property[total]
                                     print("You now own", property[total] + "\n")
                                     time.sleep(2)
+                                    
+                                    """
                                     if int(settings[1]) >= 2 and x != int(settings[1]):
                                         print("Your turn has now ended please switch to the next person \n")
                                         playerChange()
@@ -299,6 +303,8 @@ for x in range(0, int(settings[1])):
                                         print("It is now the AI's turn.... \n")
                                         playerChange()
                                         time.sleep(3)
+                                    """  
+                                
                                 elif buyCheck == "n" or buyCheck == "N":
                                     print("Ok Buy canceled... \n")
                                 else:
@@ -316,13 +322,26 @@ for x in range(0, int(settings[1])):
                         else:
                             print("Please input either y or n")
                             propertyBuyChoice = str(input("Do you want to buy this property? " + "\n"))
+                        
+
+
 
     elif property[total] == "jail/Just Visiting":
         print("Don't worry you are just visiting")
         time.sleep(2)
+        x +=1
     # If the player lands on the GO TO JAIL property, sets the players jail setting to true and moves them back to jail
     elif property[total] == "Go to Jail":
         print("You are being sent to jail")
         players[x]["isJail"] = True
         player_update = property[10]
-
+        x +=1
+        playerChange()
+    
+    if x == settings[1]-1:
+        print("It is now the Ai's turn")
+        playerChange()
+        x = 0
+    elif x < settings[1]:
+        x +=1
+        playerChange()
