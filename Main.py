@@ -24,7 +24,7 @@
 # see if you want to add a save game in memory function, use the shelve option
 import time
 import random
-from filename import add
+
 
 
 
@@ -208,12 +208,7 @@ elif "" in settingsCheck.read(1):
 else:
     print("Your setting file seems to be corrupted please either remove any random text or delete the file...")
 
-
-
-
-
 # Picks a random card from the chance lists
-
 
 def chancePickUp():
     cardPick = random.randint(0, len(chanceCards))
@@ -227,10 +222,8 @@ def communityPickUp():
 
 
 def dice_roll():
-
     die1 = random.randint(1, 6)
     die2 = random.randint(1, 6)
-
     total = die1 + die2
     return die1, die2, total
 
@@ -273,6 +266,14 @@ for x in range(0, int(settings[1])):
         else:
             print("Something went wrong, sorry")
     elif property[total] != "Community Chest":
+        # checks if the user landed on income tax and will deduct it from their money
+        if property[total] == "Income Tax":
+                print("You have to pay", propertyPrice[total])
+                money = int(players[x]["money"])
+                money -= propertyPrice[total]
+                print("You now have", money, "dollars \n")
+                playerChange()
+        elif property[total] != "Income Tax":   
             if property[total] != "Chance":
 
                 # Checks if any one owns the property
@@ -313,38 +314,21 @@ for x in range(0, int(settings[1])):
                                     time.sleep(2)
 
                                     if int(settings[1]) >= 2 and x != int(settings[1]):
-
                                         print("Your turn has now ended please switch to the next person \n")
-
                                         playerChange()
-
-
                                         time.sleep(3)
-
                                     elif int(settings[1]) == 1:
-
                                         print("It is now the AI's turn.... \n")
-
                                         playerChange()
-
                                         time.sleep(3)
-
-
                                     elif int(settings[1]) == x:
-
                                         print("It is now the AI's turn.... \n")
-
                                         playerChange()
-
                                         time.sleep(3)
-
                                 elif buyCheck == "n" or buyCheck == "N":
-
                                     print("Ok Buy canceled... \n")
-
                                 else:
                                     print("Please enter either a n or y ")
-
                             elif players[x]["money"] < propertyPrice[total]:
                                 print("You do not have enough money to buy this property")
                                 playerChange()
@@ -361,6 +345,7 @@ for x in range(0, int(settings[1])):
 
     elif property[total] == "jail/Just Visiting":
         print("Don't worry you are just visiting")
+        time.sleep(2)
     # If the player lands on the GO TO JAIL property, sets the players jail setting to true and moves them back to jail
     elif property[total] == "Go to Jail":
         print("You are being sent to jail")
