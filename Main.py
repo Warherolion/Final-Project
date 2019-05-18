@@ -18,9 +18,11 @@
 # create a rent function
 # see if you want to add a save game in memory function, use the shelve option
 # create make each player init with a input asking the user what do they want to do.
+# fix the player Update
+# Fix the retarded error
+# add check to see if Ai owns property
 import time
 import random
-
 
 
 
@@ -206,13 +208,13 @@ else:
 
 # Picks a random card from the chance lists
 def chancePickUp():
-    cardPick = random.randint(0, len(chanceCards))
+    cardPick = random.randint(0, 15)
     return chanceCards[cardPick]
 
 # Picks a random card from the community chest lists
 
 def communityPickUp():
-    cardPick = random.randint(0, len(CommunityChest))
+    cardPick = random.randint(0, 16)
     return CommunityChest[cardPick]
 # emmulates the dice roll 
 def dice_roll():
@@ -223,6 +225,90 @@ def dice_roll():
         snakeEyes = True
     total = die1 + die2
     return die1, die2, total, snakeEyes
+
+
+
+
+
+
+
+
+
+
+# AI EASY FULL PROGRAM
+aiPlayerList = []
+propLoc = 0
+for PlayerAi in range(settings[2]):
+    aiPlayerList.append(
+        {
+        "AiName": PlayerAi,
+        "money": settings[4],
+        "properties": [],
+        "railroads": [],
+        "inJail":   False,
+        "PlayerLocation": propLoc
+         }
+    )
+def buy_rand():
+    buyEasy = random.randint(0, 1)
+    return buyEasy
+
+
+
+
+# AI EASY
+def Ai_easy():
+    ChanceCardPick = chancePickUp()
+    CommunityCardPick = communityPickUp()
+    print("The Ai is going now please wait....")
+    time.sleep(1)
+    for a in range(settings[2]):
+        buyEasy = buy_rand()
+        die1, die2, total, snakeEyes = dice_roll()
+        AiLoc = propLoc + total 
+        if property[total] != "Chance":
+            if property[total] != "Community Chest":
+                if buyEasy == 1: 
+                    if propertycheck == None: 
+                            aiPlayerList[a]["properties"] = property[AiLoc]
+                            aiPlayerList[a]["PlayerLocation"] = AiLoc
+                            print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and bought it")  
+                            if snakeEyes == True:
+                                    print("The computer also got Snake eyes! and gets to roll again")   
+                                    die1, die2, total, snakeEyes = dice_roll()
+                                    if buyEasy == 1: 
+                                            if propertycheck == None: 
+                                                    aiPlayerList[a]["properties"] = property[AiLoc]
+                                                    aiPlayerList[a]["PlayerLocation"] = AiLoc
+                                                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and bought it")  
+                                            elif propertycheck != None:
+                                                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "which is owned by", propertycheck)   
+                            elif buyEasy == 0:
+                                    aiPlayerList[x]["PlayerLocation"] = AiLoc 
+                                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and did not buy it")
+                    elif buyEasy == 0:
+                            aiPlayerList[x]["PlayerLocation"] = AiLoc 
+                            print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and did not buy it") 
+            elif  property[total] == "Community Chest":
+                print(CommunityChest.index(CommunityCardPick))
+                print("The card you picked states", CommunityCardPick)
+           
+            elif property[total] == "Income Tax":
+                print("The Computer rolled a", die1,"and a", die2, "landed on", property[AiLoc], "and had to pay", propertyPrice[AiLoc])
+                money = int(aiPlayerList[a]["money"])
+                money -= propertyPrice[total]
+        elif property[total] == "Chance":
+            print(chanceCards.index(ChanceCardPick))
+            print("The card you picked states", ChanceCardPick)
+        
+
+
+
+
+
+
+
+
 
 
 # Main code, a for loop for all the real players
@@ -239,6 +325,8 @@ while True:
         for p in players:
             if property_name in p['properties']:
                 return p['playerName']  # Returns the owner of property
+            elif property_name in aiPlayerList['properties']:
+                 return aiPlayerList['AiName']
         return None
 
 
@@ -252,8 +340,10 @@ while True:
 
     if property[total] == "Community Chest" or property[total] == "Chance":
         if property[total] == "Community Chest":
+            print(CommunityChest.index(CommunityCardPick))
             print("The card you picked states", CommunityCardPick, "\n")
         elif property[total] == "Chance":
+            print(chanceCards.index(ChanceCardPick))
             print("The card you picked states", ChanceCardPick)
         else:
             print("Something went wrong, sorry")
@@ -341,6 +431,7 @@ while True:
     if x == settings[1]-1:
         print("It is now the Ai's turn")
         playerChange()
+        Ai_easy()
         x = 0
     elif x < settings[1]:
         x +=1

@@ -1,6 +1,7 @@
 # Ai programming for monopoly game
 
-from Main import *
+from Main import settings, dice_roll, propertycheck
+import time
 import random
 # All the AI easy functions 
 
@@ -50,6 +51,5 @@ def Ai_easy():
                 aiPlayerList[x]["PlayerLocation"] = AiLoc 
                 print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and did not buy it") 
 
-print(aiPlayerList)
-Ai_easy()
+
 
