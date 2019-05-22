@@ -11,6 +11,7 @@
 # todo
 # add try and except to everything
 # Add snake eye implementation for players (Ai finished)'
+# add playerlocation information
 # Turn the chance cards into commands
 # Make the AI work based off a normal and hard setting.
 # Finish if statment for if the player lands on a chance
@@ -18,9 +19,10 @@
 # create a rent function
 # see if you want to add a save game in memory function, use the shelve option
 # create make each player init with a input asking the user what do they want to do.
+# FIX THE STUPID ASS CHANCE/COMMUNITY CHEST ERROR
 import time
 import random
-
+import Aiprogram
 
 
 
@@ -178,7 +180,9 @@ if "MonoSet1-1" in settingsCheck.read():
             time.sleep(1)
             players = []
             for i in range(int(settings[1])):
+                x=1
                 name = input("What is the players name? ")
+                x += 1
                 players.append(
                     {
                     "playerName": name,
@@ -242,7 +246,7 @@ while True:
         return None
 
 
-    print("It is now", players[0+x]["playerName"] , "turn \n")
+    print("It is now", players[0+x]["playerName"]+ "'s", "turn \n")
     time.sleep(1)
     print("You rolled a", die1, "and a", die2, "you move forward",total, "steps \n")
     time.sleep(1)
