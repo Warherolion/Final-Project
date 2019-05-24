@@ -25,7 +25,6 @@
 # add check to see if Ai owns property
 import time
 import random
-import Aiprogram
 
 
 
@@ -318,7 +317,17 @@ def Ai_easy():
 # Main code, a for loop for all the real players
 x = 0
 while True: 
-    die1, die2, total, snakeEyes = dice_roll()
+    playerAction = inputs("Please enter your action (enter list to see all options)", str)
+    if playerAction == "list" or "List":
+        print("1. Roll (rolls the dice)")
+        print("2. Skip (skips turn to the next person)")
+        print("3. Place Apartment (only works once a full card set is owned)")
+        print("4. Place Hotel (only works if 4 apartments are placed on a property)")
+        print("5. Mortgage Property (Mortgage the property to get some money back)")
+        print("6. Post Bail (only works if you are in jail and have the money to pay)")
+        playerAction = inputs("Please enter your action (enter list to see all options)", str)        
+    elif playerAction == "roll" or "Roll":
+        die1, die2, total, snakeEyes = dice_roll()
 
     # Calls either chance or community function to pick a random card and give it to the player
     ChanceCardPick = chancePickUp()
@@ -326,11 +335,11 @@ while True:
    
     # property owned check, sees if anyone owns the property and returns either none or the playerName
     def is_property_owned(property_name):
-        for p in players:
+        for p,x in players, aiPlayerList:
             if property_name in p['properties']:
                 return p['playerName']  # Returns the owner of property
-            elif property_name in aiPlayerList['properties']:
-                 return aiPlayerList['AiName']
+            elif property_name in x['properties']:
+                 return x['AiName']
         return None
 
 
@@ -383,7 +392,7 @@ while True:
                                     print("You now own", property[total] + "\n")
                                     time.sleep(2)
                                     
-                                    """
+                                    # Comment this out
                                     if int(settings[1]) >= 2 and x != int(settings[1]):
                                         print("Your turn has now ended please switch to the next person \n")
                                         playerChange()
@@ -396,7 +405,7 @@ while True:
                                         print("It is now the AI's turn.... \n")
                                         playerChange()
                                         time.sleep(3)
-                                    """  
+                                      
                                 
                                 elif buyCheck == "n" or buyCheck == "N":
                                     print("Ok Buy canceled... \n")
@@ -439,3 +448,16 @@ while True:
     elif x < settings[1]:
         x +=1
         playerChange()
+    
+    elif playerAction == "Skip" or "skip":
+        print("Alright next player is going now..")
+        if x == settings[1]-1:
+            print("It is now the Ai's turn")
+            playerChange()
+            Ai_easy()
+            x = 0
+        elif x < settings[1]:
+            x +=1
+            playerChange()
+    elif playerAction == "Place Apartment" or "place apartment":
+        pass
