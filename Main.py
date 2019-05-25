@@ -25,11 +25,6 @@
 # add check to see if Ai owns property
 import time
 import random
-import Aiprogram
-
-
-
-
 
 property = ["Go", "Mediterranean Ave", "Community Chest", "Baltic Ave", "Income Tax", "Reading Railroad",
             "Oriental Ave", "Chance", "Vermont Ave", "Connecticut Ave", "jail/Just Visiting", "St. Charles Place",
@@ -270,40 +265,53 @@ def Ai_easy():
         buyEasy = buy_rand()
         die1, die2, total, snakeEyes = dice_roll()
         AiLoc = propLoc + total 
+        print(die1, die2, total, snakeEyes)
         if property[total] != "Chance":
             if property[total] != "Community Chest":
+                print("x")
                 if buyEasy == 1: 
+                    print("xy")
                     if propertycheck == None: 
+                            print("xx")
                             aiPlayerList[a]["properties"] = property[AiLoc]
                             aiPlayerList[a]["PlayerLocation"] = AiLoc
                             print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and bought it")  
                             if snakeEyes == True:
+                                    print("xxxx")
                                     print("The computer also got Snake eyes! and gets to roll again")   
                                     die1, die2, total, snakeEyes = dice_roll()
                                     if buyEasy == 1: 
+                                            print("xxq")
                                             if propertycheck == None: 
                                                     aiPlayerList[a]["properties"] = property[AiLoc]
                                                     aiPlayerList[a]["PlayerLocation"] = AiLoc
                                                     print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and bought it")  
                                             elif propertycheck != None:
+                                                    print("xdawx")
                                                     print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "which is owned by", propertycheck)   
                             elif buyEasy == 0:
+                                    print("xdad")
                                     aiPlayerList[x]["PlayerLocation"] = AiLoc 
                                     print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and did not buy it")
-                    elif buyEasy == 0:
-                            aiPlayerList[x]["PlayerLocation"] = AiLoc 
+                    elif propertycheck != None:
+                        print("xdawx")
+                        print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "which is owned by", propertycheck)   
+                elif buyEasy == 0:
+                            print("xgf")
+                            aiPlayerList[a]["PlayerLocation"] = AiLoc 
                             print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and did not buy it") 
             elif  property[total] == "Community Chest":
-                print(CommunityChest.index(CommunityCardPick))
-                print("The card you picked states", CommunityCardPick)
+                print("xfa")
+                print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "the card states", CommunityCardPick) 
            
             elif property[total] == "Income Tax":
+                print("xgsdfg")
                 print("The Computer rolled a", die1,"and a", die2, "landed on", property[AiLoc], "and had to pay", propertyPrice[AiLoc])
                 money = int(aiPlayerList[a]["money"])
                 money -= propertyPrice[total]
         elif property[total] == "Chance":
-            print(chanceCards.index(ChanceCardPick))
-            print("The card you picked states", ChanceCardPick)
+            print("xdaw")
+            print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "the card states", CommunityCardPick) 
         
 
 
@@ -329,8 +337,10 @@ while True:
         for p in players:
             if property_name in p['properties']:
                 return p['playerName']  # Returns the owner of property
-            elif property_name in aiPlayerList['properties']:
-                 return aiPlayerList['AiName']
+            else:
+                for a in aiPlayerList:
+                    if property_name in a['properties']:
+                        return a['AiName']  # Returns the owner of property
         return None
 
 
@@ -433,8 +443,8 @@ while True:
     
     if x == settings[1]-1:
         print("It is now the Ai's turn")
-        playerChange()
         Ai_easy()
+        playerChange()
         x = 0
     elif x < settings[1]:
         x +=1
