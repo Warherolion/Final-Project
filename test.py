@@ -161,49 +161,6 @@ def gameSettingsSetup():
 
     return settingsCheck, players
 
-
-# Intro
-settingsCheck = open("settings.txt", "r")
-print("Hello! Welcome to the game of monopoly, Terminal version before we can start we have to make sure "
-      "everything is set up properly... \n")
-time.sleep(2)
-# Settings check, checks if a settings file exists and if so checks if the user wants to use them. s
-importSetyn = input("You have saved settings in you setting file, would you like to use them? (y or n): \n")
-if "MonoSet1-1" in settingsCheck.read():
-    while True:
-        if importSetyn == "y" or importSetyn == "Y":
-            print("Alright lets start your game... \n")
-            time.sleep(1)
-            players = []
-            for i in range(int(settings[1])):
-                x=1
-                name = input("What is the players name? ")
-                x += 1
-                players.append(
-                    {
-                    "playerName": name,
-                    "money": settings[4],
-                    "properties": [],
-                    "railroads": [],
-                    "inJail":   False,
-                    "PlayerLocation": 0
-                    }
-                )
-            break
-        elif importSetyn == "n" or importSetyn == "N":
-            time.sleep(1)
-            gameSettingsSetup()
-            break
-        else:
-            print("Invalid Input")
-            importSetyn = input("You have saved settings in you setting file, would you like to use them? "
-                                "(y or n): ")
-elif "" in settingsCheck.read(1):
-    print("You dont have any saved settings lets fix that.....")
-    gameSettingsSetup()
-else:
-    print("Your setting file seems to be corrupted please either remove any random text or delete the file...")
-
 # Picks a random card from the chance lists
 def chancePickUp():
     cardPick = random.randint(0, 15)
@@ -252,6 +209,50 @@ def buy_rand():
     return buyEasy
 
 
+
+
+
+# Main
+settingsCheck = open("settings.txt", "r")
+print("Hello! Welcome to the game of monopoly, Terminal version before we can start we have to make sure "
+      "everything is set up properly... \n")
+time.sleep(2)
+# Settings check, checks if a settings file exists and if so checks if the user wants to use them. s
+importSetyn = input("You have saved settings in you setting file, would you like to use them? (y or n): \n")
+if "MonoSet1-1" in settingsCheck.read():
+    while True:
+        if importSetyn == "y" or importSetyn == "Y":
+            print("Alright lets start your game... \n")
+            time.sleep(1)
+            players = []
+            for i in range(int(settings[1])):
+                x=1
+                name = input("What is the players name? ")
+                x += 1
+                players.append(
+                    {
+                    "playerName": name,
+                    "money": settings[4],
+                    "properties": [],
+                    "railroads": [],
+                    "inJail":   False,
+                    "PlayerLocation": 0
+                    }
+                )
+            break
+        elif importSetyn == "n" or importSetyn == "N":
+            time.sleep(1)
+            gameSettingsSetup()
+            break
+        else:
+            print("Invalid Input")
+            importSetyn = input("You have saved settings in you setting file, would you like to use them? "
+                                "(y or n): ")
+elif "" in settingsCheck.read(1):
+    print("You dont have any saved settings lets fix that.....")
+    gameSettingsSetup()
+else:
+    print("Your setting file seems to be corrupted please either remove any random text or delete the file...")
 
 
 # AI EASY
@@ -335,14 +336,11 @@ while True:
     
         die1, die2, total, snakeEyes = dice_roll()
 
-
         # Calls either chance or community function to pick a random card and give it to the player
 
         ChanceCardPick = chancePickUp()
 
         CommunityCardPick = communityPickUp()
-
-
 
         # property owned check, sees if anyone owns the property and returns either none or the playerName
 
@@ -355,8 +353,6 @@ while True:
                         if property_name in a['properties']:
                             return a['AiName']  # Returns the owner of property
             return None
-
-        
 
         time.sleep(1)
         pd = property.index(property[total])
