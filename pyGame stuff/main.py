@@ -8,7 +8,7 @@ screen = pygame.display.set_mode((1000, 600))
 myfont = pygame.font.Font("MONOPOLY_INLINE.ttf",50)
 
 #images 
-cover = pygame.image.load("Images and assets/MONOCOVER.bmp")
+#cover = pygame.image.load("Images and assets/MONOCOVER.bmp")
 
 
 
@@ -17,21 +17,28 @@ cover = pygame.image.load("Images and assets/MONOCOVER.bmp")
 # Color Definitions 
 black = pygame.Color(0,0,0)
 white = pygame.Color(255, 255, 255)
+
 # Game Exit Loop
 gameExit = False
 while not gameExit:
     for event in pygame.event.get():
         # Cover Screen
-        screen.blit(cover, (0,0))
+        # screen.blit(cover, (0,0))
 
         # All Rectangles 
         PlayButton = pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(324, 380, 354, 35))
         instructButton = pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(324, 450, 354, 35))
         settingsButton = pygame.draw.rect(screen, (0, 0, 0), pygame.Rect(324, 515, 354, 35))
         
+        print(type(PlayButton))
+        playDems = PlayButton.width
+        playDemsheight = PlayButton.height
         # text write
         text = myfont.render("Play", True, white)
-        screen.blit(text, (324,380))
+        print(type(text))
+        x =PlayButton.centerx=(playDems/2)
+        y = PlayButton.centery =(playDemsheight/2)
+        screen.blit(text, (x, y))
        
         # Mouse over button if statment 
         if PlayButton.collidepoint(pygame.mouse.get_pos()):
