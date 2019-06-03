@@ -1,0 +1,3 @@
+# Main player list
+
+player = []

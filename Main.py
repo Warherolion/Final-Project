@@ -35,7 +35,11 @@ propertyPrice= [
     200, 60, 0, 60,100, 200, 100, 0, 100, 120, 0, 140, 150, 140, 160,200, 180, 0,180, 200, 0, 220, 0, 220, 240,
     200, 260, 260, 150, 280, 0, 300, 300, 0, 320, 200, 0, 350, 300, 400
 ]
-
+propertyColor = [
+    "None", "Brown", "None", "Brown", "None", "None", "Navy", "None", "Navy", "Navy", "None", "Pink", "None", "Pink", "Pink", "None", "Orange", 
+    "None", "Orange", "Orange", "None", "Red", "None", "Red", "Red", "None", "Yellow", "Yellow", "None", "Yellow", "None", "Green", "Green", "None",
+    "Green", "None", "None", "Blue", "None", "Blue"    
+]
 chanceCards = ["Advance to Go (Collect $200)", "Advance to Illinois Ave—If you pass Go, collect $200",
                "Advance to St. Charles Place – If you pass Go, collect $200", "Advance token to nearest Utility",
                "Advance token to the nearest Railroad and pay owner twice the rental to which they areotherwise "
@@ -182,7 +186,7 @@ if "MonoSet1-1" in settingsCheck.read():
                     {
                     "playerName": name,
                     "money": settings[4],
-                    "properties": [],
+                    "properties": ["Mediterranean Ave", "Baltic Ave"],
                     "railroads": [],
                     "inJail":   False,
                     "PlayerLocation": 0
@@ -674,13 +678,20 @@ while True:
             x +=1
             playerChange()
     elif playerAction == 3:
-            pass
+
+        for k in ( len(players[x]["properties"])):
+            colorCheck = players.index(players[x]["properties"][k])
+            for i in range (len(players[x]["properties"])):
+                cC = players.index(players[x]["properties"][i])
+                if colorCheck == propertyColor[cC]:
+                    print("Yess")
+                else: 
+                    print("You dont have any full property sets")
     elif playerAction == 4:
         pass
     elif playerAction == 5:
         pass
     elif playerAction == 6:
-        pass
         if players[0+x]["isJail"] == True:
             while True:    
                 bailChoice = input("The price of bail is $300, would you like to pay it?")

@@ -3,4 +3,3 @@ from Main import chanceCards, CommunityChest, communityPickUp,chancePickUp, x, p
 # chance
 if chanceCards == 0:
     u =2
-elif
