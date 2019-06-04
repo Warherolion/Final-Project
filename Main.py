@@ -19,7 +19,7 @@
 # see if you want to add a save game in memory function, use the shelve option
 import time
 import random
-
+from collections import Counter
 
 
 
@@ -678,15 +678,9 @@ while True:
             x +=1
             playerChange()
     elif playerAction == 3:
-
-        for k in ( len(players[x]["properties"])):
-            colorCheck = players.index(players[x]["properties"][k])
-            for i in range (len(players[x]["properties"])):
-                cC = players.index(players[x]["properties"][i])
-                if colorCheck == propertyColor[cC]:
-                    print("Yess")
-                else: 
-                    print("You dont have any full property sets")
+        repeat = [propertyColor[property.index(x)] for x in players[x]["properties"]]
+        repeat_dict = Counter(repeat)
+        print(repeat_dict, repeat)
     elif playerAction == 4:
         pass
     elif playerAction == 5:
