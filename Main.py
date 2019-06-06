@@ -40,6 +40,7 @@ propertyColor = [
     "None", "Orange", "Orange", "None", "Red", "None", "Red", "Red", "None", "Yellow", "Yellow", "None", "Yellow", "None", "Green", "Green", "None",
     "Green", "None", "None", "Blue", "None", "Blue"    
 ]
+Color=["Brown", "Navy", "Pink", "Orange", "Red", "Yellow", "Green", "Blue"]
 chanceCards = ["Advance to Go (Collect $200)", "Advance to Illinois Ave—If you pass Go, collect $200",
                "Advance to St. Charles Place – If you pass Go, collect $200", "Advance token to nearest Utility",
                "Advance token to the nearest Railroad and pay owner twice the rental to which they areotherwise "
@@ -187,6 +188,7 @@ if "MonoSet1-1" in settingsCheck.read():
                     "playerName": name,
                     "money": settings[4],
                     "properties": ["Mediterranean Ave", "Baltic Ave"],
+                    "Colors": ["Brown", "Brown"],
                     "railroads": [],
                     "inJail":   False,
                     "PlayerLocation": 0
@@ -342,7 +344,7 @@ def roll():
                                             money -= int(propertyPrice[player_update])
 
                                             players[0 + x]["properties"] = property[player_update]
-
+                                            players[x]["Colors"] = propertyColor[player_update]
                                             print("You now own", property[player_update] + "\n")
 
                                             time.sleep(2)
@@ -397,11 +399,12 @@ def Ai_easy():
     CommunityCardPick = communityPickUp()
     print("The Ai is going now please wait....")
     time.sleep(1)
+    BigBoi = "(ง ͠° ͟ل͜ ͡°)ง"
     for a in range(settings[2]):
         buyEasy = buy_rand()
         die1, die2, total, snakeEyes = dice_roll()
         AiLoc = propLoc + total 
-        print(die1, die2, total, snakeEyes)
+
         if property[total] != "Chance":
             if property[total] != "Community Chest":
                 if buyEasy == 1:
@@ -589,6 +592,7 @@ while True:
                                         money -= int(propertyPrice[player_update])
 
                                         players[0 + x]["properties"] = property[player_update]
+                                        players[x]["Colors"] = propertyColor[player_update]
 
                                         print("You now own", property[player_update] + "\n")
 
@@ -678,9 +682,16 @@ while True:
             x +=1
             playerChange()
     elif playerAction == 3:
-        repeat = [propertyColor[property.index(x)] for x in players[x]["properties"]]
-        repeat_dict = Counter(repeat)
-        print(repeat_dict, repeat)
+        for by in range(len(Color)):
+            propCount = players[x]["properties"].count(Color[by])
+            if propCount == 2:
+                if players[x]["properties"].count("Blue") == 2:
+                    pass
+                elif players[x]["properties"].count("Blue") == 2:
+                    pass
+            elif propCount == 3:
+                pass    
+
     elif playerAction == 4:
         pass
     elif playerAction == 5:
