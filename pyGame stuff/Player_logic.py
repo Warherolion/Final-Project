@@ -19,7 +19,7 @@ with open("settings.txt") as file:
 file.close()
 
 settingsCheck = open("settings.txt", "r")
-settingsSaved = False
+
 if "MonoSet1-1" in settingsCheck.read():
     settingsSaved = True
 
