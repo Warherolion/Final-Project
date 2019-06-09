@@ -1,4 +1,5 @@
 import pygame
+import pygame as pg
 pygame.init()
 
 # basic screen setup
@@ -20,10 +21,13 @@ PlayerName4 = pygame.image.load("Images and assets/PlayerName4.bmp")
 # Color Definitions 
 black = pygame.Color(0,0,0)
 white = pygame.Color(255, 255, 255)
+color_inactive = pygame.Color('lightskyblue3')
+color_active = pygame.Color('dodgerblue2')
+color = color_inactive
 
 
+players = []
 # File access
-
 settings = []
 with open("settings.txt") as file:
     for line in file:
@@ -85,53 +89,107 @@ def settingsSaved():
                     if mouseX>((10.48/35.28)*width) and mouseX<((14.04 /35.28)*width):
                         if mouseY > ((12.88/21.17)*height) and mouseY <((13.62/21.17) * height):
                             # asks the user for the names based off of the settings
-                            playerName()
-                            pass
+                            return True
                     # Checks if the user clicks on the No button
                     elif mouseX>((21.59/35.28)*width) and mouseX<((25.15 /35.28)*width):
                         if mouseY > ((12.88/21.17)*height) and mouseY <((13.62/21.17) * height):
                             print("no")
-                            return    
-            
+                            return False   
+
             pygame.display.update() 
     else:
         print(settingsSaved)
-def playerName():
-    """
-        players = []
-        for i in range(int(settings[1])):
-                                players.append(
-                                    {
-                                    "playerName": name,
-                                    "money": settings[4],
-                                    "properties": [],
-                                    "Colors": [],
-                                    "railroads": [],
-                                    "inJail":   False,
-                                    "PlayerLocation": 0
-                                    }
-                                )
-    """
-    
-    if int(settings[1]) == 2:
-        screen.blit(cover, (0,0))
-        screen.blit(PlayerName2, (0,0))
-    elif int(settings[1] == 4):
-        screen.blit(PlayerName4, (9.17/35.28)*width,(5.54/23.28)*height)
+
 # Game Exit Loop
 gameExit = False
-
+draw = False
 while not gameExit:
     # Cover Screen
     screen.blit(cover, (0,0))
     
     # Main screen
     mouseX, mouseY = pygame.mouse.get_pos()
+    text = ''
+    if draw:
+        if int(settings[1]) == 2:
+            screen.blit(cover, (0,0))
+            screen.blit(PlayerName2, ((9.17/35.28)*width,(5.54/23.28)*height))
+            font = pg.font.Font(None, 32)
+            clock = pg.time.Clock()
+            name1 = pg.Rect(316, 224, 500, 33)
+            color = color_inactive
+            active = False
+            text = ''
+            done = False
+
+            while not done:
+                for event in pg.event.get():
+                    if event.type == pg.QUIT:
+                        done = True
+                    if event.type == pg.MOUSEBUTTONDOWN:
+                        # If the user clicked on the input_box rect.
+                        if name1.collidepoint(event.pos):
+                            # Toggle the active variable.
+                            active = not active
+                        else:
+                            active = False
+                    if event.type == pg.KEYDOWN:
+                        if active:
+                            if event.key == pg.K_RETURN:
+                                print(text)
+                                text = ''
+                            elif event.key == pg.K_BACKSPACE:
+                                text = text[:-1]
+                            else:
+                                text += event.unicode
+                #screen.fill((0, 0, 0))               
+                # Render the current text.
+                txt_surface = font.render(text, True, white)
+                # Resize the box if the text is too long.
+                width = max(200, txt_surface.get_width()+10)
+                name1.w = width
+                # Blit the text.
+                screen.blit(txt_surface, (name1.x+5, name1.y+5))
+                # Blit the input_box rect.
+                pg.draw.rect(screen, black, name1, 2)
+
+
+            for playNum in range (int(settings[1])):
+                players.append( 
+                    {
+                    "playerName": txt_surface,
+                    "money": settings[4],
+                    "properties": [],
+                    "Colors": [],
+                    "railroads": [],
+                    "inJail":   False,
+                    "PlayerLocation": 0
+                    }
+
+                )
+
+
+            print(players)
+        elif int(settings[1] == 4):
+            screen.blit(PlayerName4, (9.17/35.28)*width,(5.54/23.28)*height)
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONDOWN:            
             if mouseX>((11.36/35.28)*width) and mouseX<((23.85/35.28)*width):
                 if mouseY > ((13.58/21.17)*height) and mouseY <((14.78/21.17) * height):
-                        settingsSaved()
+                        done = settingsSaved()
+                        print("Yes")
+                        if done == False:
+                            pass
+                        if done:
+                            if int(settings[1]) == 2:
+                                screen.blit(cover, (0,0))
+                                screen.blit(PlayerName2, (0,0))
+                            elif int(settings[1] == 4):
+                                screen.blit(PlayerName4, (9.17/35.28)*width,(5.54/23.28)*height)
+                            draw = True
+                            #screen.fill((0, 0, 0))
+                            print("no negg")
+
                         print("No saved Settings")
                 elif mouseY > ((16.02/21.17)* height) and mouseY < ((17.5/21.17) *  height):
                     print("Settings")
