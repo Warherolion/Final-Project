@@ -15,6 +15,10 @@ clock = pygame.time.Clock()
 cover = pygame.image.load("Images and assets/MONOCOVER.bmp")
 instruct = pygame.image.load("Images and assets/instruct.bmp")
 settingsSavedImg = pygame.image.load("Images and assets/SavedSettings.bmp")
+
+
+#Monopoly Board
+board = pygame.image.load("Images and assets/monopolyBoard.bmp")
 # Name Asker
 PlayerName2 = pygame.image.load("Images and assets/PlayerName2.bmp")
 PlayerName4 = pygame.image.load("Images and assets/PlayerName4.bmp")
@@ -51,6 +55,10 @@ if "MonoSet1-1" in settingsCheck.read():
     settingsSaved = True
 else:
     settingsSaved = False
+
+
+def MainGame():
+    pass
 
 # Instructions Page 
 def instructPage():
@@ -112,52 +120,11 @@ while not gameExit:
     text = ''
     if draw:
         if int(settings[1]) == 2:
-            screen.blit(cover, (0,0))
-            screen.blit(PlayerName2, ((9.17/35.28)*width,(5.54/23.28)*height))
-            font = pg.font.Font(None, 32)
-            clock = pg.time.Clock()
-            name1 = pg.Rect(316, 224, 500, 33)
-            color = color_inactive
-            active = False
-            text = ''
-            done = False
-
-            while not done:
-                for event in pg.event.get():
-                    if event.type == pg.QUIT:
-                        done = True
-                    if event.type == pg.MOUSEBUTTONDOWN:
-                        # If the user clicked on the input_box rect.
-                        if name1.collidepoint(event.pos):
-                            # Toggle the active variable.
-                            active = not active
-                        else:
-                            active = False
-                    if event.type == pg.KEYDOWN:
-                        if active:
-                            if event.key == pg.K_RETURN:
-                                print(text)
-                                text = ''
-                            elif event.key == pg.K_BACKSPACE:
-                                text = text[:-1]
-                            else:
-                                text += event.unicode
-                #screen.fill((0, 0, 0))               
-                # Render the current text.
-                txt_surface = font.render(text, True, white)
-                # Resize the box if the text is too long.
-                width = max(200, txt_surface.get_width()+10)
-                name1.w = width
-                # Blit the text.
-                screen.blit(txt_surface, (name1.x+5, name1.y+5))
-                # Blit the input_box rect.
-                pg.draw.rect(screen, black, name1, 2)
-
-
             for playNum in range (int(settings[1])):
+                name = input("Please enter your player name: ")
                 players.append( 
                     {
-                    "playerName": txt_surface,
+                    "playerName": name,
                     "money": settings[4],
                     "properties": [],
                     "Colors": [],
@@ -165,11 +132,9 @@ while not gameExit:
                     "inJail":   False,
                     "PlayerLocation": 0
                     }
-
                 )
-
-
-            print(players)
+                MainGame()
+            
         elif int(settings[1] == 4):
             screen.blit(PlayerName4, (9.17/35.28)*width,(5.54/23.28)*height)
     for event in pygame.event.get():
@@ -179,7 +144,7 @@ while not gameExit:
                         done = settingsSaved()
                         print("Yes")
                         if done == False:
-                            pass
+                            print("No saved Settings")
                         if done:
                             if int(settings[1]) == 2:
                                 screen.blit(cover, (0,0))
@@ -190,7 +155,7 @@ while not gameExit:
                             #screen.fill((0, 0, 0))
                             print("no negg")
 
-                        print("No saved Settings")
+                        
                 elif mouseY > ((16.02/21.17)* height) and mouseY < ((17.5/21.17) *  height):
                     print("Settings")
                 elif mouseY > ((18.27/21.17) * height) and mouseY < ((19.51/21.17) * height):
