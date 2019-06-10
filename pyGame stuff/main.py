@@ -162,7 +162,6 @@ def MainGame():
                         if mouseX>((7.573/11.448)*width) and mouseX<((8.344 /11.448)*width):
                             if mouseY > ((6.670/7.354)*height) and mouseY <((7.031/7.354) * height):
                                 if x == 0:
-                                    print("Hello")
                                     # Calls either chance or community function to pick a random card and give it to the player
                                     ChanceCardPick = chancePickUp()
                                     CommunityCardPick = communityPickUp()
@@ -181,10 +180,6 @@ def MainGame():
                                     pd = property.index(property[total])
                                     players[0 + x]["PlayerLocation"] += pd
                                     player_update = players[0 + x]["PlayerLocation"]
-                                
-                                    print("You rolled a", die1, "and a", die2, "you move forward",total, "steps \n")
-                                    
-                                    print("You landed on", property[player_update] + "\n")
                                     
                                     if property[player_update] == "Community Chest" or property[player_update] == "Chance":
                                         if property[player_update] == "Community Chest":
@@ -363,7 +358,6 @@ while not gameExit:
                 )  
             draw = False
             MainGame()
-            print("My namei sgay")
         elif int(settings[1] == 4):
             screen.blit(PlayerName4, (9.17/35.28)*width,(5.54/23.28)*height)
     for event in pygame.event.get():

@@ -108,6 +108,138 @@ def inputs(line, typeinp=None, start=None, end=None):
             break
     return string
 
+def chance_community():
+    if property[player_update] == "Chance":
+        if chanceCards.index(ChanceCardPick) == 0:
+            players[x]["PlayerLocation"] = 0
+            money = int(players[x]["money"])
+            money += 200
+            print("You were moved back to go and gained $200")
+        elif chanceCards.index(ChanceCardPick) == 1:
+            ill = property.index("Illinois Ave") 
+            
+            players[x]["PlayerLocation"] = ill
+            print("You are now on Illinois Ave")
+        elif chanceCards.index(ChanceCardPick) == 2:
+            cill = property.index("St. Charles Place")
+            players[x]["PlayerLocation"] = ill
+            print("You are now on St. Charles Place")
+        elif chanceCards.index(ChanceCardPick) == 3:
+            money = int(players[x]["money"])
+            money += 50
+            print("You earned 5$0")
+        elif chanceCards.index(ChanceCardPick) == 4:
+            if players[x]["Getoutajail"] == True:
+                print("You already have a get outa jail free card so no more for you..")
+            elif players[x]["Getoutajail"] == False:
+                players[x]["Getoutajail"] == True
+                print("You now own a get out of jail free card")
+        elif chanceCards.index(ChanceCardPick) == 5:
+            players[x]["PLayerLocation"] -= 3
+            print("You Got moved back 3 spaces")
+        elif chanceCards.index(ChanceCardPick) == 6:
+            players[x]["inJail"]= True
+            players[x]["PlayerLocation"] = 10
+            print("Oh no you are now in jail")
+        elif chanceCards.index(ChanceCardPick) == 7:
+            money = int(players[x]["money"])   
+            money -= 15
+        elif chanceCards.index(ChanceCardPick) == 8:
+            players[x]["PlayerLocation"] = 5
+            print("You went to reading railroad")
+        elif chanceCards.index(ChanceCardPick) == 9:
+            bord = property.index("Boardwalk")
+            players[x]["PlayerLocation"] = bord
+            print("You went to Boardwalk")
+        elif chanceCards.index(ChanceCardPick) == 10:
+            count = 0
+            for pp in range(len(players)):
+                money = players[pp]["money"]
+                money +=50
+                count +=1
+            moneylost = (50 * count) -50
+            players[x]["money"] -= moneylost
+            print("You paid everyone $50") 
+        elif chanceCards.index(ChanceCardPick) == 11:
+            money = players[x]["money"]
+            money +=150
+            print("You made $150")
+        elif chanceCards.index(ChanceCardPick) == 12:
+            money = players[x]["money"]
+            money +=100
+            print("You made $100")
+
+    elif property[player_update] == "Community Chest":
+        if CommunityChest.index(ChanceCardPick) == 0:
+            players[x]["PlayerLocation"] = 0
+            money = int(players[x]["money"])
+            money += 200
+            print("You were moved back to go and gained $200")
+        elif CommunityChest.index(ChanceCardPick) == 1:
+            money = int(players[x]["money"])
+            money += 200
+            print("You made $200")
+        elif CommunityChest.index(ChanceCardPick) == 2:
+            money = int(players[x]["money"])
+            money += 50
+            print("You paid $50")
+        elif CommunityChest.index(ChanceCardPick) == 3:
+            money = int(players[x]["money"])
+            money += 50
+            print("You earned $50")
+        elif CommunityChest.index(ChanceCardPick) == 4:
+            if players[x]["Getoutajail"] == True:
+                print("You already have a get outa jail free card so no more for you..")
+            elif players[x]["Getoutajail"] == False:
+                players[x]["Getoutajail"] == True
+                print("You now own a get out of jail free card")
+        elif CommunityChest.index(ChanceCardPick) == 5:
+            players[x]["inJail"]= True
+            players[x]["PlayerLocation"] = 10
+            print("Oh no you are now in jail")
+        elif CommunityChest.index(ChanceCardPick) == 6:
+            count = 0
+            for pp in range(len(players)):
+                money = players[pp]["money"]
+                money -=50
+                count +=1
+            moneyGain = (50 * count) +50
+            players[x]["money"] -= moneyGain
+            print("You got $50 from everyone") 
+        
+        elif CommunityChest.index(ChanceCardPick) == 7:
+            money = int(players[x]["money"])   
+            money += 100
+            print("You made $100")
+        elif CommunityChest.index(ChanceCardPick) == 8:
+            money = int(players[x]["money"])   
+            money += 20
+            print("You made $20")
+        elif CommunityChest.index(ChanceCardPick) == 9:
+            money = int(players[x]["money"])   
+            money += 10
+            print("You made $10")
+        elif CommunityChest.index(ChanceCardPick) == 10:
+            money = int(players[x]["money"])   
+            money += 100
+            print("You made $100")
+        elif CommunityChest.index(ChanceCardPick) == 11:
+            money = players[x]["money"]
+            money -=150
+            print("You paid $150")
+        elif CommunityChest.index(ChanceCardPick) == 12:
+            money = players[x]["money"]
+            money +=25
+            print("You made $25")
+        elif CommunityChest.index(ChanceCardPick) == 13:
+            money = players[x]["money"]
+            money +=10
+            print("You made $10")
+        elif CommunityChest.index(ChanceCardPick) == 14:
+            money = players[x]["money"]
+            money +=100
+            print("You made $100")
+
 
 def playerChange():
     print("Next Player")
@@ -118,7 +250,6 @@ def playerChange():
     print("*")
     print("***************************************")
 # Settings file, if user chooses to run setup this is all the setup questions
-
 
 def gameSettingsSetup():
     settingsCheck = open("settings.txt", "r")
@@ -211,13 +342,13 @@ else:
 
 # Picks a random card from the chance lists
 def chancePickUp():
-    cardPick = random.randint(0, 15)
+    cardPick = random.randint(0, 12)
     return chanceCards[cardPick]
-
+ 
 # Picks a random card from the community chest lists
 
 def communityPickUp():
-    cardPick = random.randint(0, 16)
+    cardPick = random.randint(0, 13)
     return CommunityChest[cardPick]
 # emmulates the dice roll 
 def dice_roll():
@@ -246,40 +377,27 @@ def roll():
                             if property_name in a['properties']:
                                 return a['AiName']  # Returns the owner of property
                 return None
-
-            
-
             time.sleep(1)
             pd = property.index(property[total])
-
             players[0 + x]["PlayerLocation"] += pd
-    
             player_update = players[0 + x]["PlayerLocation"]
-
-            # MoveTotal = players[0 + x]["PlayerLocation"]
+            #MoveTotal = players[0 + x]["PlayerLocation"]
             # print(MoveTotal)
             print("You rolled a", die1, "and a", die2, "you move forward",total, "steps \n")
-
-            time.sleep(1)
-
             print("You landed on", property[player_update] + "\n")
-
             time.sleep(1)
-
             if property[player_update] == "Community Chest" or property[player_update] == "Chance":
-
                 if property[player_update] == "Community Chest":
-
                     print(CommunityChest.index(CommunityCardPick))
-
                     print("The card you picked states", CommunityCardPick, "\n")
-
+                    chance_community()
+                    playerChange()
                 elif property[player_update] == "Chance":
-
                     print(chanceCards.index(ChanceCardPick))
-
                     print("The card you picked states", ChanceCardPick)
-
+                    
+                    chance_community()
+                    playerChange()
                 else:
 
                     print("Something went wrong, sorry")
@@ -365,9 +483,7 @@ def roll():
                                         print("Boi you are broke, you can't buy anything \n")
                                         playerChange()
                                 elif propertyBuyChoice == "n" or propertyBuyChoice == "N":
-
                                     print("Alright")
-
                                 else:
                                     print("Please input either y or n")
                                     propertyBuyChoice = str(input("Do you want to buy this property? " + "\n"))
@@ -441,38 +557,33 @@ def Ai_easy():
             print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "the card states", CommunityCardPick) 
         
 
-        
+ """       
+***************************************
+*                                     *
+*      Name: John                     *
+*      Money: 1500                    *
+*      In Jail: False                 *
+*                                     *  
+***************************************
+"""
 
 
-
-
-
-
-
-
-
+def playerInfo():
+    print("Name:", players[x]["playerName"] )
 
 # Main code, a for loop for all the real players
 x = 0
 while True: 
+    
     print("It is now", players[0+x]["playerName"]+ "'s", "turn \n")
-    
     print("1. Roll (rolls the dice)")
-
     print("2. Skip (skips turn to the next person)")
-
     print("3. Place Apartment (only works once a full card set is owned)")
-
     print("4. Place Hotel (only works if 4 apartments are placed on a property)")
-
     print("5. Mortgage Property (Mortgage the property to get some money back)")
-
     print("6. Post Bail (only works if you are in jail and have the money to pay)")
-
     print("7. Save Game (Save the current state of the game)")
-
     print("8. Quit game")
-    
     playerAction = inputs("Please enter your action: ", "integer", 1, 6)
       
     if playerAction == 1 :
@@ -523,13 +634,16 @@ while True:
                 print(CommunityChest.index(CommunityCardPick))
 
                 print("The card you picked states", CommunityCardPick, "\n")
+                chance_community()
+                playerChange()
 
             elif property[player_update] == "Chance":
 
                 print(chanceCards.index(ChanceCardPick))
 
                 print("The card you picked states", ChanceCardPick)
-
+                chance_community()
+                playerChange()
             else:
 
                 print("Something went wrong, sorry")

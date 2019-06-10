@@ -1,0 +1,5 @@
+MonoSet1-1: true
+numPlayer: 2
+numAIplayer: 1
+AI Level: Easy
+startingMoney: 1500
