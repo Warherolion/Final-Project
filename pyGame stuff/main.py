@@ -56,7 +56,7 @@ clock = pygame.time.Clock()
 cover = pygame.image.load("Images and assets/MONOCOVER.bmp")
 instruct = pygame.image.load("Images and assets/instruct.bmp")
 settingsSavedImg = pygame.image.load("Images and assets/SavedSettings.bmp")
-
+propBuy = pygame.image.load("Images and assets/PropBuy.bmp")
 RollButton = pygame.image.load("Images and assets/RollButton.bmp")
 SkipButton = pygame.image.load("Images and assets/skipButton.png")
 
@@ -89,13 +89,13 @@ def dice_roll():
     return die1, die2, total, snakeEyes
 # Picks a random card from the chance lists
 def chancePickUp():
-    cardPick = random.randint(0, 15)
+    cardPick = randint(0, 15)
     return chanceCards[cardPick]
 
 # Picks a random card from the community chest lists
 
 def communityPickUp():
-    cardPick = random.randint(0, 16)
+    cardPick = randint(0, 16)
     return CommunityChest[cardPick]
 
 
@@ -149,9 +149,9 @@ def MainGame():
             playerProperties = subfont.render("Owned Properties: ", False, (0, 0, 0))
             propHeight = 100
             for c in range (len(players[x]["properties"])):
+                print(players[x]["properties"])
                 playerProp = subfont.render(players[x]["properties"][c], False, (0, 0, 0))
                 screen.blit (playerProp, (730, propHeight))
-                print(propHeight)
                 propHeight += 30
             playerMoney = subfont.render("Money: " + str(players[0]["money"]), False, (0, 0, 0))
             screen.blit (playerMoney, (730, propHeight+20))
@@ -162,6 +162,7 @@ def MainGame():
                         if mouseX>((7.573/11.448)*width) and mouseX<((8.344 /11.448)*width):
                             if mouseY > ((6.670/7.354)*height) and mouseY <((7.031/7.354) * height):
                                 if x == 0:
+                                    print("Hello")
                                     # Calls either chance or community function to pick a random card and give it to the player
                                     ChanceCardPick = chancePickUp()
                                     CommunityCardPick = communityPickUp()
@@ -222,7 +223,7 @@ def MainGame():
                                                                 if buyCheck == "y" or buyCheck == "Y":
                                                                     money = int(players[0 + x]["money"])
                                                                     money -= int(propertyPrice[player_update])
-                                                                    players[0 + x]["properties"] = property[player_update]
+                                                                    players[0 + x]["properties"].append(property[player_update])
                                                                     players[x]["Colors"] = propertyColor[player_update]
                                                                     print("You now own", property[player_update] + "\n")
                                                                 elif buyCheck == "n" or buyCheck == "N":
@@ -286,7 +287,7 @@ def MainGame():
         
         pygame.display.update()
         screen.fill((255, 255, 255))
-        return  die1, die2, total, snakeEyes
+
 # Instructions Page 
 def instructPage():
     #updates screen to size that fits the instructions page
@@ -362,6 +363,7 @@ while not gameExit:
                 )  
             draw = False
             MainGame()
+            print("My namei sgay")
         elif int(settings[1] == 4):
             screen.blit(PlayerName4, (9.17/35.28)*width,(5.54/23.28)*height)
     for event in pygame.event.get():
