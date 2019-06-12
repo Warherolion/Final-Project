@@ -13,9 +13,8 @@
 # Create a hotel and apartments function 
 import time
 import random
-from collections import Counter
 
-
+# A list of all the properties the user can land on
 property = ["Go", "Mediterranean Ave", "Community Chest", "Baltic Ave", "Income Tax", "Reading Railroad",
             "Oriental Ave", "Chance", "Vermont Ave", "Connecticut Ave", "jail/Just Visiting", "St. Charles Place",
             "Electric Company", "States Ave", "Virginia Ave", "Pennsylvania Railroad", "St. James Place",
@@ -23,16 +22,19 @@ property = ["Go", "Mediterranean Ave", "Community Chest", "Baltic Ave", "Income 
             "Indiana Ave", "Illinois Ave", "B. & O. Railroad", "Atlantic Ave", "Ventnor Ave", "Water Works",
             "Marvin Gardens", "Go to Jail", "Pacific Ave", "North Carolina Ave", "Community Chest",
             "Pennsylvania Ave", "Short Line Railroad", "Chance", "Park Place", "Luxury Tax", "Boardwalk"]
+
+# a corresponding index list of all the property prices
 propertyPrice= [
     200, 60, 0, 60,100, 200, 100, 0, 100, 120, 0, 140, 150, 140, 160,200, 180, 0,180, 200, 0, 220, 0, 220, 240,
     200, 260, 260, 150, 280, 0, 300, 300, 0, 320, 200, 0, 350, 300, 400
 ]
+# another corresponding index list of all property colors 
 propertyColor = [
     "None", "Brown", "None", "Brown", "None", "None", "Navy", "None", "Navy", "Navy", "None", "Pink", "None", "Pink", "Pink", "None", "Orange", 
     "None", "Orange", "Orange", "None", "Red", "None", "Red", "Red", "None", "Yellow", "Yellow", "None", "Yellow", "None", "Green", "Green", "None",
     "Green", "None", "None", "Blue", "None", "Blue"    
 ]
-Color=["Brown", "Navy", "Pink", "Orange", "Red", "Yellow", "Green", "Blue"]
+# all the chance cards and Community chest cards
 chanceCards = ["Advance to Go (Collect $200)", "Advance to Illinois Ave",
                "Advance to St. Charles Place – If you pass Go, collect $200", "Bank pays you dividend of $50", "Get Out of Jail Free", "Go Back 3 Spaces",
                "Go to Jail","Pay poor tax of $15", "Take a trip to Reading Railroad",
@@ -52,10 +54,8 @@ CommunityChest = ["Advance to Go (Collect $200)", "Bank error in your favor—Co
                 "a beauty contest–Collect $10",
                 "You inherit $100"]
 
-players = []
 
-playerMoveCount = []
-
+# Back end function that dont directly affect gameplay 
 # Allows for access to the settings file and drops values into a list
 settings = []
 with open("settings.txt") as file:
@@ -73,7 +73,6 @@ with open("settings.txt") as file:
             line = line[0]
             settings.append(line)
 file.close()
-
 
 # Error checking for inputs file stored as a function
 
@@ -98,6 +97,7 @@ def inputs(line, typeinp=None, start=None, end=None):
             break
     return string
 
+# A list of commands for the player and AI if they land on a chance/community chest card
 def chance_community():
     if property[player_update] == "Chance":
         if chanceCards.index(ChanceCardPick) == 0:
@@ -124,7 +124,7 @@ def chance_community():
             if players[PlayerTurn]["Getoutajail"] == True:
                 print("You already have a get outa jail free card so no more for you..")
             elif players[PlayerTurn]["Getoutajail"] == False:
-                players[PlayerTurn]["Getoutajail"] == True
+                players[PlayerTurn]["Getoutajail"] = True
                 print("You now own a get out of jail free card")
         elif chanceCards.index(ChanceCardPick) == 5:
             players[PlayerTurn]["PLayerLocation"] -= 3
@@ -190,7 +190,7 @@ def chance_community():
             if players[PlayerTurn]["Getoutajail"] == True:
                 print("You already have a get outa jail free card so no more for you..")
             elif players[PlayerTurn]["Getoutajail"] == False:
-                players[PlayerTurn]["Getoutajail"] == True
+                players[PlayerTurn]["Getoutajail"] = True
                 print("You now own a get out of jail free card")
         elif CommunityChest.index(ChanceCardPick) == 5:
             players[PlayerTurn]["inJail"]= True
@@ -247,6 +247,7 @@ def chance_community():
             print("You made $100")
             players[PlayerTurn]["money"] = money
 
+# A function that clears the screen for users when the next player comes on
 def playerChange():
     print("Next Player")
     print("***************************************")
@@ -256,37 +257,32 @@ def playerChange():
     print("*")
     print("***************************************")
     return
-# Settings file, if user chooses to run setup this is all the setup questions
 
+# A game settings file that allows the user to setup their game to their liking
 def gameSettingsSetup():
     settingsCheck = open("settings.txt", "r")
     print("Lets setup")
     # Int Setup questions
-    numPlayers = str(inputs('How many real players are playing: ', "intger"))
-    numAIplayers = str(inputs('How many AI players will be playing?: ', "integer"))
-    if numAIplayers != "0":
-        AILevel = str(inputs("What AI difficulty level would you like? (Easy, Normal, Hard): "))
-        while True:
-            if AILevel == "Easy" or AILevel == "Normal" or AILevel == "Hard":
-                startingMoney = str(inputs("How much money does everyone start with? Max: 10 000 (Keep in mind "
-                                           "this does not affect the property prices) ", "integer", 100, 10000))
-
-                for i in range(int(numPlayers)):
-                    name = input("What is the players name? ")
-                    players.append({"playerName": name, "money":startingMoney, "properties": [], "railroads": []})
-
+    numPlayers = str(inputs('How many real players are playing: ', "intger", 1, 10))
+    AIEnabled = input("Would you like to enable Ai players for this game? ")
+    while True:    
+        if AIEnabled == "y" or "Y":
+            startingMoney = str(inputs("How much money does everyone start with? Max: 10 000 (Keep in mind "
+                                    "this does not affect the property prices) ", "integer", 100, 10000))
+            for i in range(int(numPlayers)):
+                name = input("What is the players name? ")
+                players.append({"playerName": name, "money":startingMoney, "properties": [], "railroads": []})
                 break
-            else:
-                print("Please enter a valid input (make sure to capitalize the first letter)")
-                AILevel = str(inputs("What AI difficulty level would you like? (Easy, Normal, Hard): "))
-
-    elif numAIplayers == "0":
-        startingMoney = str(inputs("How much money does everyone start with? Max: 10 000 (Keep in mind "
-                                   "this does not affect the property prices) ", "integer", 100, 10000))
-
-        for i in range(int(numPlayers)):
-            name = input("What is the players name? ")
-            players.append(name)
+        elif AIEnabled == "n" or "N":
+            startingMoney = str(inputs("How much money does everyone start with? Max: 10 000 (Keep in mind "
+                                    "this does not affect the property prices) ", "integer", 100, 10000))
+            for i in range(int(numPlayers)):
+                name = input("What is the players name? ")
+                players.append({"playerName": name, "money":startingMoney, "properties": [], "railroads": []})
+            break
+        else:
+            print("Please enter either y or n")
+            AIEnabled = input("Would you like to enable Ai players for this game? ")
 
     print("Alright the setup is complete, Your game will start now....")
     time.sleep(1)
@@ -296,12 +292,12 @@ def gameSettingsSetup():
         with open("settings.txt", "w") as file:
             file.write("MonoSet1-1: true" + "\n")
             file.write("numPlayer: " + numPlayers + "\n")
-            file.write("numAIplayer: " + numAIplayers + "\n")
-            file.write("AI Level: " + AILevel + "\n")
+            file.write("numAIplayer: " + AIEnabled + "\n")
             file.write("startingMoney: " + startingMoney + "\n")
             file.close()
 
     return settingsCheck, players
+
 
 # Picks a random card from the chance lists
 def chancePickUp():
@@ -323,7 +319,6 @@ def dice_roll():
     total = die1 + die2
     return die1, die2, total, snakeEyes
 
-    
 def is_property_owned(property_name):
     for p in players:
         if property_name in p['properties']:
@@ -333,7 +328,7 @@ def is_property_owned(property_name):
                 if property_name in a['properties']:
                     return a['AiName']  # Returns the owner of property
     return None
-# Decides weather or not to buy the property
+
 def buy_rand():
     buyEasy = random.randint(0, 1)
     return buyEasy
@@ -347,13 +342,15 @@ for PlayerAi in range(settings[2]):
         "AiName": PlayerAi,
         "money": settings[4],
         "properties": [],
+        "Colors": [],
         "railroads": [],
         "inJail":   False,
         "PlayerLocation": propLoc,
         "Getoutajail": False
          }
     )
-# AI EASY
+
+# AI program
 def Ai_easy():
     ChanceCardPick = chancePickUp()
     CommunityCardPick = communityPickUp()
@@ -365,60 +362,95 @@ def Ai_easy():
         if money > 50: 
             buyEasy = buy_rand()
             die1, die2, total, snakeEyes = dice_roll()
-            AiLoc = propLoc + total 
             AD = property.index(property[total])
-            aiPlayerList[0]["PlayerLocation"] += AD
-            AiUpdate = aiPlayerList[0]["PlayerLocation"]
-            propertycheck = is_property_owned(property[AiUpdate])
+            if AD > 40:
+                newLoop = AD - 40
+                AD = 0 + newLoop
+                aiPlayerList[PlayerTurn]["PlayerLocation"] += AD
+                AI_update = aiPlayerList[PlayerTurn]["PlayerLocation"]
+                print("You passed go and collected $200")
+                money = int(aiPlayerList[PlayerTurn]["money"])
+                money += 200
+                aiPlayerList[0]["money"] = money
+            elif AD < 40:
+                aiPlayerList[0]["PlayerLocation"] += AD
+                AI_update = aiPlayerList[0]["PlayerLocation"]
+
+            propertycheck = is_property_owned(property[AI_update])
             if property[total] != "Chance":
                 if property[total] != "Community Chest":
                     if property[total] != "jail/Just Visiting":
-                        if buyEasy == 1:
-                            if propertycheck == None:
-                                    aiPlayerList[a]["properties"] = property[AiLoc]
-                                    aiPlayerList[a]["PlayerLocation"] = AiLoc
-                                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and bought it")  
-                                    if snakeEyes == True:
-                                            print("The computer also got Snake eyes! and gets to roll again")   
-                                            die1, die2, total1, snakeEyes = dice_roll()
-                                            if buyEasy == 1: 
-                                                    if propertycheck == None: 
-                                                            aiPlayerList[a]["properties"] = property[AiLoc]
-                                                            aiPlayerList[a]["PlayerLocation"] = AiLoc
-                                                            print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc+ total1], "and bought it")  
-                                                    elif propertycheck != None:
-                                                            print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc + total1], "which is owned by", propertycheck)
-                                                            for i in range(len(players)):
-                                                                if propertycheck in players[i]["playerName"]:
-                                                                    propOwn = players[i]
-                                                            rentValue = propertyPrice[player_update] * 0.60
-                                                            money = int(players[PlayerTurn]["money"])
-                                                            money -= rentValue
-                                                            players[PlayerTurn]["money"] = int(money)
-                                                            moneyErn = int(propOwn["money"])
-                                                            moneyErn +=rentValue
-                                                            propOwn["money"] = int(moneyErn)
-
-                                                            print("You paid rent to", propertycheck, "for a total of", rentValue)      
-                                                            print(players)                           
+                        if property[total] != "Income Tax" and property[total] != "Luxury Tax":
+                            if buyEasy == 1:
+                                if propertycheck == None:
+                                        aiPlayerList[a]["properties"].append(property[AI_update])
+                                        aiPlayerList[a]["Colors"].append(propertyColor[AI_update])
+                                        print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AI_update], "and bought it")  
+                                        if snakeEyes == True:
+                                                print("The computer also got Snake eyes! and gets to roll again")   
+                                                die1, die2, total1, snakeEyes = dice_roll()
+                                                buyEasy = buy_rand()
+                                                if buyEasy == 1: 
+                                                        if propertycheck == None: 
+                                                                aiPlayerList[a]["properties"].append(property[AI_update+total1])
+                                                                aiPlayerList[a]["Colors"].append(propertyColor[AI_update+total])
+                                                                aiPlayerList[a]["PlayerLocation"] = AI_update+total
+                                                                print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AI_update+total], "and bought it")  
+                                                        elif propertycheck != None:
+                                                                print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AI_update], "which is owned by", propertycheck)
+                                                                for i in range(len(players)):
+                                                                    if propertycheck in players[i]["playerName"]:
+                                                                        propOwn = players[i]
+                                                                rentValue = propertyPrice[AI_update] * 0.60
+                                                                money = int(aiPlayerList[0]["money"])
+                                                                money -= rentValue
+                                                                aiPlayerList[0]["money"] = money
+                                                                moneyErn = int(propOwn["money"])
+                                                                moneyErn +=rentValue
+                                                                propOwn["money"] = int(moneyErn)
+                                                                print("The bot paid rent to ", propOwn["playerName"], "of a total of", rentValue)
+                                                elif buyEasy == 0:
+                                                        aiPlayerList[0]["PlayerLocation"] = AI_update 
+                                                        print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AI_update], "and did not buy it")
+                                elif propertycheck != None:
+                                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AI_update], "which is owned by", propertycheck)
+                                    for i in range(len(players)):
+                                        if propertycheck in players[i]["playerName"]:
+                                                propOwn = players[i]
+                                        rentValue = propertyPrice[AI_update] * 0.60
+                                        money = int(aiPlayerList[0]["money"])
+                                        money -= rentValue
+                                        aiPlayerList[0]["money"] = money
+                                        moneyErn = int(propOwn["money"])
+                                        moneyErn +=rentValue
+                                        propOwn["money"] = int(moneyErn)
+                                        print("The bot paid rent to ", propOwn["playerName"], "of a total of", rentValue)   
                             elif buyEasy == 0:
-                                    aiPlayerList[0]["PlayerLocation"] = AiLoc 
-                                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and did not buy it")
-                            elif propertycheck != None:
-                                print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "which is owned by", propertycheck)   
-                        elif buyEasy == 0:
-                                    aiPlayerList[a]["PlayerLocation"] = AiLoc 
-                                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "and did not buy it") 
+                                        aiPlayerList[a]["PlayerLocation"] = AI_update 
+                                        print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AI_update], "and did not buy it") 
+                        # If the AI lands on the Income Tax then it will be deducted from their account
+                        elif property[total] == "Income Tax":
+                            print("The bot had to pay income tax of $200")
+                            money = int(aiPlayerList[0]["money"])
+                            money -= 200
+                            aiPlayerList[0]["money"] = money
+                        # If the AI lands on the luxury tax then it will be deducted from their account
+                        elif property[total] == "Luxury Tax":
+                            print("The bot had to pay Luxury Tax of $200")
+                            money = int(aiPlayerList[0]["money"])
+                            money -= 200
+                            aiPlayerList[0]["money"] = money
                     elif property[total] == "jail/Just Visiting":
                         print("The Bot landed on Jail/ Just Visiting")
                 elif  property[total] == "Community Chest":
-                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "the card states", CommunityCardPick) 
+                    print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AI_update], "the card states", CommunityCardPick) 
                 elif property[total] == "Income Tax":
-                    print("The Computer rolled a", die1,"and a", die2, "landed on", property[AiLoc], "and had to pay", propertyPrice[AiLoc])
+                    print("The Computer rolled a", die1,"and a", die2, "landed on", property[AI_update], "and had to pay", propertyPrice[AI_update])
                     money = int(aiPlayerList[a]["money"])
                     money -= propertyPrice[total]
+                    aiPlayerList[0]["money"] = money 
             elif property[total] == "Chance":
-                print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AiLoc], "the card states", CommunityCardPick) 
+                print("The Computer rolled a", die1,"and a", die2, "and landed on", property[AI_update], "the card states", CommunityCardPick) 
         elif money < 50:
             print("The Ai ran out of money and is forfiting")
             aiPlayerList.remove(0)
@@ -438,7 +470,11 @@ def playerInfo():
     if players[PlayerTurn]["Getoutajail"]:
         print("You have a Get out of jail card")
     else:
-        print("you have no get out of jail card \n")      
+        print("you have no get out of jail card \n")     
+
+# The main player list which will cointain all the player information
+players = []
+
 # Intro
 settingsCheck = open("settings.txt", "r")
 print("Hello! Welcome to the game of monopoly, Terminal version before we can start we have to make sure "
@@ -459,8 +495,8 @@ if "MonoSet1-1" in settingsCheck.read():
                     {
                     "playerName": name,
                     "money": settings[4],
-                    "properties": ["Mediterranean Ave", "Baltic Ave"],
-                    "Colors": ["Brown", "Brown", "Blue", "Blue", "Blue"],
+                    "properties": [],
+                    "Colors": [],
                     "APTS": [],
                     "Hotels": [],
                     "inJail":   False,
@@ -482,7 +518,9 @@ elif "" in settingsCheck.read(1):
     gameSettingsSetup()
 else:
     print("Your setting file seems to be corrupted please either remove any random text or delete the file...")
-  
+
+
+
 # Main code, a for loop for all the real players
 PlayerTurn = 0
 while True: 
@@ -492,11 +530,9 @@ while True:
         print("It is now", players[PlayerTurn]["playerName"]+ "'s", "turn \n")
         print("1. Roll (rolls the dice)")
         print("2. Skip (skips turn to the next person)")
-        print("3. Place Apartment (only works once a full card set is owned)")
-        print("4. Place Hotel (only works if 4 apartments are placed on a property)")
-        print("5. Mortgage Property (Mortgage the property to get some money back)")
-        print("6. Post Bail (only works if you are in jail and have the money to pay)")
-        print("7. Quit game")
+        print("3. Mortgage Property (Mortgage the property to get some money back)")
+        print("4. Post Bail (only works if you are in jail and have the money to pay)")
+        print("5. Quit game")
         playerAction = inputs("Please enter your action: ", "integer", 1, 7)
         
         if playerAction == 1 :
@@ -508,8 +544,7 @@ while True:
                         CommunityCardPick = communityPickUp()
                         # property owned check, sees if anyone owns the property and returns either none or the playerName
                         time.sleep(1)
-                        #pd = property.index(property[total])
-                        pd = 30
+                        pd = property.index(property[total])
                         if pd > 40:
                             newLoop = pd - 40
                             pd = 0 + newLoop
@@ -520,24 +555,37 @@ while True:
                             money += 200
                             players[PlayerTurn]["money"] = money
                         elif pd < 40:
-                            print("Hello") 
                             players[PlayerTurn]["PlayerLocation"] += pd
                             player_update = players[PlayerTurn]["PlayerLocation"]
 
                         print("You rolled a", die1, "and a", die2, "you move forward",total, "steps \n")
                         time.sleep(1)
-                        print(player_update)
                         print("You landed on", property[player_update] + "\n")
                         time.sleep(1)
                         if property[player_update] == "Community Chest" or property[player_update] == "Chance":
                             if property[player_update] == "Community Chest":
-                                print(CommunityChest.index(CommunityCardPick))
                                 print("The card you picked states", CommunityCardPick, "\n")
                                 chance_community()
+                                if PlayerTurn == settings[1]-1:
+                                        print("It is now the Ai's turn")
+                                        playerChange()
+                                        Ai_easy()
+                                        PlayerTurn = 0
+                                elif PlayerTurn < settings[1]:
+                                        PlayerTurn +=1
+                                        playerChange()
+
                             elif property[player_update] == "Chance":
-                                print(chanceCards.index(ChanceCardPick))
                                 print("The card you picked states", ChanceCardPick)
                                 chance_community()
+                                if PlayerTurn == settings[1]-1:
+                                        print("It is now the Ai's turn")
+                                        playerChange()
+                                        Ai_easy()
+                                        PlayerTurn = 0
+                                elif PlayerTurn < settings[1]:
+                                        PlayerTurn +=1
+                                        playerChange()
                             else:
                                 print("Something went wrong, sorry")
                         elif property[player_update] != "Community Chest":
@@ -570,56 +618,76 @@ while True:
                                         moneyErn +=rentValue
                                         propOwn["money"] = int(moneyErn)
 
-                                        print("You paid rent to", propertycheck, "for a total of", rentValue)      
-                                        print(players)
+                                        print("You paid rent to", propertycheck, "for a total of", rentValue) 
+                                        if PlayerTurn == settings[1]-1:
+                                                    print("It is now the Ai's turn")
+                                                    playerChange()
+                                                    Ai_easy()
+                                                    PlayerTurn = 0
+                                        elif PlayerTurn < settings[1]:
+                                                    PlayerTurn +=1
+                                                    playerChange()
                                     # checks if no one owns the property and is not on jail
                                     elif propertycheck == None and property[player_update] != "jail/Just Visiting":
                                         # prints the price of the property as long as it costs more than 0
                                         if propertyPrice[player_update] > 0:
                                             print("It costs " + str(propertyPrice[player_update]) + " dollars  ")
                                             propertyBuyChoice = str(input("Do you want to buy this property? " + "\n"))
-                                            if propertyBuyChoice == "y" or propertyBuyChoice == "Y":
-                                                if int(players[PlayerTurn]["money"]) > propertyPrice[player_update]:
-                                                    print("You have", players[PlayerTurn]["money"], "dollars \n")
-                                                    buyCheck = input("You have enough money to buy this property, are you sure you want to buy it?: \n")
-                                                    if buyCheck == "y" or buyCheck == "Y":
-                                                        money = int(players[PlayerTurn]["money"])
-                                                        players[PlayerTurn]["money"] -= int(propertyPrice[player_update])
-                                                        players[PlayerTurn]["properties"].append(property[player_update])
-                                                        players[PlayerTurn]["Colors"].append(propertyColor[player_update])
-                                                        print("You now own", property[player_update] + "\n")
-                                                        time.sleep(2)
-                                                    elif buyCheck == "n" or buyCheck == "N":
-                                                        print("Ok Buy canceled... \n")
-                                                    else:
-                                                        print("Please enter either a n or y ")
-                                                elif players[PlayerTurn]["money"] < propertyPrice[player_update]:
-                                                    print("You do not have enough money to buy this property")
-                                                    
-                                                    playerChange()
-                                                elif players[PlayerTurn]["money"] == 0:
-                                                    print("Boi you are broke, you can't buy anything \n")
-                                                    
-                                                    playerChange()
-                                            elif propertyBuyChoice == "n" or propertyBuyChoice == "N":
-                                                print("Alright buy canceled")
-                                            else:
-                                                print("Please input either y or n")
-                                                propertyBuyChoice = str(input("Do you want to buy this property? " + "\n"))
+                                            while True:
+                                                if propertyBuyChoice == "y" or propertyBuyChoice == "Y":
+                                                    if int(players[PlayerTurn]["money"]) > propertyPrice[player_update]:
+                                                        print("You have", players[PlayerTurn]["money"], "dollars \n")
+                                                        buyCheck = input("You have enough money to buy this property, are you sure you want to buy it?: \n")
+                                                        while True:        
+                                                            if buyCheck == "y" or buyCheck == "Y":
+                                                                money = int(players[PlayerTurn]["money"])
+                                                                players[PlayerTurn]["money"] -= int(propertyPrice[player_update])
+                                                                players[PlayerTurn]["properties"].append(property[player_update])
+                                                                players[PlayerTurn]["Colors"].append(propertyColor[player_update])
+                                                                print("You now own", property[player_update] + "\n")
+                                                                time.sleep(2)
+                                                                break
+                                                            elif buyCheck == "n" or buyCheck == "N":
+                                                                print("Ok Buy canceled... \n")
+                                                                break    
+                                                            else:
+                                                                print("Please enter either a n or y ")
+                                                                buyCheck = input("You have enough money to buy this property, are you sure you want to buy it?: \n")
+                                                    elif players[PlayerTurn]["money"] < propertyPrice[player_update]:
+                                                        print("You do not have enough money to buy this property")
+                                                        
+                                                        playerChange()
+                                                    elif players[PlayerTurn]["money"] == 0:
+                                                        print("Boi you are broke, you can't buy anything \n")
+                                                        
+                                                        playerChange()
+                                                    break
+                                                elif propertyBuyChoice == "n" or propertyBuyChoice == "N":
+                                                    print("Alright buy canceled")
+                                                    break
+                                                else:
+                                                    print("Please input either y or n")
+                                                    propertyBuyChoice = str(input("Do you want to buy this property? " + "\n"))
+                                            
                                             if PlayerTurn == settings[1]-1:
                                                     print("It is now the Ai's turn")
-                                                    
                                                     playerChange()
-                                                    
                                                     Ai_easy()
                                                     PlayerTurn = 0
                                             elif PlayerTurn < settings[1]:
                                                     PlayerTurn +=1
-                                                    
                                                     playerChange()
-                        elif property[player_update] == "jail/Just Visiting":
-                            print("Don't worry you are just visiting")
-                            time.sleep(2)
+                                    elif property[player_update] == "jail/Just Visiting":
+                                        print("Don't worry you are just visiting")
+                                        if PlayerTurn == settings[1]-1:
+                                            print("It is now the Ai's turn")
+                                            playerChange()
+                                            Ai_easy()
+                                            PlayerTurn = 0
+                                        elif PlayerTurn < settings[1]:
+                                            PlayerTurn +=1
+                                            playerChange()
+                                        time.sleep(2)
                         # If the player lands on the GO TO JAIL property, sets the players jail setting to true and moves them back to jail
                         elif property[player_update] == "Go to Jail":
                             print("You are being sent to jail")
@@ -651,55 +719,9 @@ while True:
                 PlayerTurn +=1
                  
                 playerChange()
-            """
-            elif playerAction == 3:
-                PropColors = []
-                for pp in range(len(propertyColor)):
-                    PropColors.append(propertyColor[pp])
-                if players[PlayerTurn]["Colors"].count("Blue") == 2:
-                    ColValues= []              
-                    for p in range(len(players[])):
-                            PropColIndex = propertyColor.index("Brown")
-                            del PropColors[PropColIndex]
-                            ColValues.append(property[p]) 
-                    for up in range (len(ColValues)):
-                        print(up, ColValues[up])
-                    BuildChoice = inputs("Which Property would you like to build on?(Note that whenever a player lands on the property the rent will be increased by 20% for each apt): ", "integer", 0, len(ColValues))
-                    hotelnums = inputs("How many hotels would you like?: ", "integer", 1, 4)
-                    players[PlayerTurn]["APTS"].append(BuildChoice,hotelnums)
-                    print(players)
-                elif players[PlayerTurn]["Colors"].count("Brown") == 2:
-                    ColValues= []
-                    for p in range(len(propertyColor)):
-                            PropColIndex = propertyColor.index("Brown")
-                            del PropColors[PropColIndex]
-                            ColValues.append(property[p]) 
-                    for up in range (len(ColValues)):
-                        print(up, ColValues[up])
-                    BuildChoice = inputs("Which Property would you like to build on?(Note that whenever a player lands on the property the rent will be increased by 20% for each apt): ", "integer", 0, len(ColValues))
-                    hotelnums = inputs("How many hotels would you like?: ", "integer", 1, 4)
-                    players[PlayerTurn]["APTS"].append(BuildChoice,hotelnums)
-                    print(players)
-                
-                #elif propCount == 3:
-                    #   pass    
-
-            elif playerAction == 4:
-                pass
-            """
-        elif playerAction == 5:
+        elif playerAction == 3:
             if len(players[PlayerTurn]["properties"]) == 0:
                 print("You have no properties")
-                print("It is now", players[PlayerTurn]["playerName"]+ "'s", "turn \n")
-                print("1. Roll (rolls the dice)")
-                print("2. Skip (skips turn to the next person)")
-                print("3. Place Apartment (only works once a full card set is owned)")
-                print("4. Place Hotel (only works if 4 apartments are placed on a property)")
-                print("5. Mortgage Property (Mortgage the property to get some money back)")
-                print("6. Post Bail (only works if you are in jail and have the money to pay)")
-                print("7. Save Game (Save the current state of the game)")
-                print("8. Quit game")
-                playerAction = inputs("Please enter your action: ", "integer", 1, 6)    
             elif  len(players[PlayerTurn]["properties"]) > 0:
                 print("Warning Mortgaging a property will remove it from your pack and will be on the open market again")
                 choice = input("Do you want to continue?: ")
@@ -719,22 +741,11 @@ while True:
                         print("Your property is now mortgaged and you made", mortValue, "dollers")
                         break
                     elif choice == "N" or "n":
-                        print("Alright")
-                        print("It is now", players[PlayerTurn]["playerName"]+ "'s", "turn \n")
-                        print("1. Roll (rolls the dice)")
-                        print("2. Skip (skips turn to the next person)")
-                        print("3. Place Apartment (only works once a full card set is owned)")
-                        print("4. Place Hotel (only works if 4 apartments are placed on a property)")
-                        print("5. Mortgage Property (Mortgage the property to get some money back)")
-                        print("6. Post Bail (only works if you are in jail and have the money to pay)")
-                        print("7. Save Game (Save the current state of the game)")
-                        print("8. Quit game")
-                        playerAction = inputs("Please enter your action: ", "integer", 1, 6)
                         break 
                     else: 
                         print("Please enter either y or n")
                         choice = input("Do you want to continue?")
-        elif playerAction == 6:
+        elif playerAction == 4:
             if players[PlayerTurn]["inJail"] == True:
                 while True:    
                     bailChoice = input("The price of bail is $300, would you like to pay it?: ")
@@ -775,7 +786,7 @@ while True:
                         bailChoice = input("The price of bail is $300, would you like to pay it?: ")
             elif players[PlayerTurn]["inJail"] == False:
                 print("You are not in jail")
-        elif playerAction == 7:
+        elif playerAction == 5:
             print("Good bye")
             break
         else:
